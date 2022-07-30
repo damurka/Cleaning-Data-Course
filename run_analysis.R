@@ -50,17 +50,19 @@ getTrackData <- function(folder) {
 ## download.file(downloadUrl, destfile = "exercise/dataset.zip")
 ## unzip("exercise/dataset.zip", exdir = "exercise")
 
-## Merging the training and the test sets to create one data set.
-testData <- getTrackData("test")
-trainData <- getTrackData("train")
-combined <- rbind(testData, trainData)
+cleanData <- function() {
+  ## Merging the training and the test sets to create one data set.
+  testData <- getTrackData("test")
+  trainData <- getTrackData("train")
+  combined <- rbind(testData, trainData)
 
-## creates a second, independent tidy data set with the average of each variable 
-## for each activity and each subject.
-idLabels <- c("subject", "activityId", "activityLabel")
-measureLabels <- setdiff(names(combined), idLabels)
-meltData <- melt(combined, id = idLabels, measure.vars = measureLabels)
-tidyData <- dcast(meltData, subject + activityLabel ~ variable, mean)
-
-## Creates tidy data set as a txt file 
-write.table(tidyData, file = "tidy_data.txt", row.names = FALSE)
+  ## creates a second, independent tidy data set with the average of each variable 
+  ## for each activity and each subject.
+  idLabels <- c("subject", "activityId", "activityLabel")
+  measureLabels <- setdiff(names(combined), idLabels)
+  meltData <- melt(combined, id = idLabels, measure.vars = measureLabels)
+  tidyData <- dcast(meltData, subject + activityLabel ~ variable, mean)
+  
+  ## Creates tidy data set as a txt file 
+  write.table(tidyData, file = "tidy_data.txt", row.names = FALSE)
+}
